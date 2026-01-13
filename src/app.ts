@@ -4,6 +4,7 @@ import logger from '#config/logger.ts'
 import morgan from 'morgan'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
+import authRoutes from '#routes/auth.routes.ts'
 const app = express()
 
 app.use(helmet())
@@ -26,5 +27,19 @@ app.get('/', (req, res) => {
   logger.info('Hello from the application')
   res.send('Hello from the application')
 })
+
+app.use('/health', (req, res) =>
+  res.status(200).json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    version: process.env.npm_package_version,
+    environment: process.env.NODE_ENV,
+    uptime: process.uptime(),
+    memoryUsage: process.memoryUsage(),
+    message: 'Health check',
+  })
+)
+app.get('/api', (req, res) => res.status(200).json({ message: 'API is running' }))
+app.use('/api/auth', authRoutes)
 
 export default app
