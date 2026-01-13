@@ -1,0 +1,58 @@
+# Dependencies
+node_modules
+bun.lock
+
+# Build outputs
+out
+dist
+*.tgz
+
+# Logs
+logs
+*.log
+*.lcov
+
+# Environment files
+.env
+.env.*
+!.env.*.example
+
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Cache
+.eslintcache
+.cache
+*.tsbuildinfo
+
+# Coverage
+coverage
+report.*.json
+
+# Drizzle (migrations are included, but generated files can be ignored)
+# drizzle/ is kept for migrations
+
+# Documentation (optional - uncomment if you don't want docs in image)
+# README.md
+# docs/
+
+# Test files
+**/*.test.ts
+**/*.spec.ts
+**/__tests__/
+
+# Temporary files
+*.tmp
+*.temp

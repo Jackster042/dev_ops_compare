@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: release
+    container_name: dev_ops_compare_app_prod
+    ports:
+      - '${PORT:-3000}:3000'
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - PORT=${PORT:-3000}
+      - ARCJET_KEY=${ARCJET_KEY}
+    env_file:
+      - .env.production
+    restart: unless-stopped
+
+networks:
+  default:
+    name: dev_ops_compare_network_prod
