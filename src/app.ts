@@ -5,6 +5,8 @@ import morgan from 'morgan'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import authRoutes from '#routes/auth.routes.ts'
+import { securityMiddleware } from '#middleware/security.middleware.ts'
+import type { RequestHandler } from 'express'
 const app = express()
 
 app.use(helmet())
@@ -15,6 +17,7 @@ app.use(express.urlencoded({ extended: true }))
 
 type Message = string
 
+app.use(securityMiddleware as RequestHandler)
 app.use(
   morgan('combined', {
     stream: {
