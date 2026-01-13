@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: prerelease
+    container_name: dev_ops_compare_app_dev
+    ports:
+      - '${PORT:-3000}:3000'
+    volumes:
+      # Mount source code for hot reload
+      - ./src:/app/src
+      - ./package.json:/app/package.json
+      - ./tsconfig.json:/app/tsconfig.json
+      - ./drizzle.config.js:/app/drizzle.config.js
+      # Exclude node_modules from volume mount (use container's node_modules)
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=${DATABASE_URL:-postgres://neon:npg@neon-local:5432/neondb}
+      - PORT=${PORT:-3000}
+      - ARCJET_KEY=${ARCJET_KEY}
+    env_file:
+      - .env.development
+    depends_on:
+      neon-local:
+        condition: service_started
+    restart: unless-stopped
+    command: bun --watch src/index.ts
+
+  neon-local:
+    image: neondatabase/neon_local:latest
+    container_name: dev_ops_compare_neon_local
+    ports:
+      - '5432:5432'
+    env_file:
+      - .env.development
+    restart: unless-stopped
+
+networks:
+  default:
+    name: dev_ops_compare_network
